@@ -27,7 +27,7 @@ type Props = {
     products: API.Product[]
 }
 
-const Index: NextPage<Props> = ({ products }) => {
+const IndexPage: NextPage<Props> = ({ products }) => {
     return (
         <>
             <HeroContainer>
@@ -39,7 +39,7 @@ const Index: NextPage<Props> = ({ products }) => {
             </HeroContainer>
 
             {products.map((product) => (
-                <ProductContainer>
+                <ProductContainer key={product.id}>
                     <ProductHero product={product}/>
                 </ProductContainer>
             ))}
@@ -47,7 +47,7 @@ const Index: NextPage<Props> = ({ products }) => {
     )
 }
 
-export default Index
+export default IndexPage
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
     return {

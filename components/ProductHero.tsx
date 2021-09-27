@@ -1,6 +1,7 @@
 import { shopr } from "api"
 import styled from "styled-components"
 import { API } from "../api/types"
+import ProductScene from "./ProductScene"
 import Button from "./styled/Button"
 
 const Title = styled.h1`
@@ -8,11 +9,9 @@ const Title = styled.h1`
     margin: 0;
 `
 
-const PreviewImage = styled.img`
-    max-width: 1500px;
-    width: 100vw;
-    margin: auto;
-` 
+const CanvasContainer = styled.div`
+    height: 500px;
+`
 
 const ActionContainer = styled.div`
     display: flex;
@@ -25,25 +24,26 @@ const Price = styled.p`
     font-size: 18px;
 `
 
-function findPreviewImage(product: API.Product) {
-    return product.assets.find((asset) => asset.type.key === "image")
+function findModel(product: API.Product) {
+    return product.assets.find((asset) => asset.type.key === "model")
 }
 
 export default function ProductHero({ product }: {
     product: API.Product
 }) {
-    const previewImage = findPreviewImage(product)
+    const model = findModel(product)
 
     return (
         <div>
             <Title>{product.name}</Title>
 
-            { previewImage && (
-                <PreviewImage
-                    src={shopr.getAssetURL(previewImage)}
-                    alt="Preview"
-                />
-            ) }
+            {/* { model && (
+                <ProductScene modelUrl={shopr.getAssetURL(model)}/>
+            ) } */}
+
+            <CanvasContainer>
+                <ProductScene modelUrl="/assets/hammr.stl"/>
+            </CanvasContainer>
 
             <ActionContainer>
                 <Price>{product.price}€</Price>
