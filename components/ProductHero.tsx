@@ -37,13 +37,11 @@ export default function ProductHero({ product }: {
         <div>
             <Title>{product.name}</Title>
 
-            {/* { model && (
-                <ProductScene modelUrl={shopr.getAssetURL(model)}/>
-            ) } */}
-
-            <CanvasContainer>
-                <ProductScene modelUrl="/assets/hammr.stl"/>
-            </CanvasContainer>
+            { model && (
+                <CanvasContainer>
+                    <ProductScene modelUrl={shopr.getAssetURL(model)}/>
+                </CanvasContainer>
+            ) }                
 
             <ActionContainer>
                 <Price>{product.price}€</Price>
