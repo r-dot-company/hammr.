@@ -7,7 +7,12 @@ import ProductHero from "components/ProductHero"
 const HeroContainer = styled.div`
     display: flex;
     justify-content: space-between;
-    margin-bottom: 350px;
+    margin-bottom: 400px;
+`
+
+const HeroInnerNavContainer = styled.div`
+    display: flex;
+    flex-direction: column;
 `
 
 const ProductContainer = styled.div`
@@ -21,6 +26,18 @@ const Logo = styled.img`
 const BrandName = styled.h1`
     font-size: 96px;
     margin: 64px 0;
+    text-align: right;
+`
+
+const NavItem = styled.a`
+    display: block;
+    font-size: 72px;
+    font-weight: 800;
+    text-align: right;
+
+    &:hover {
+        color: #aaaaaa;
+    }
 `
 
 type Props = {
@@ -35,11 +52,20 @@ const IndexPage: NextPage<Props> = ({ products }) => {
                     src="assets/logo-white.svg"
                     alt="Logo"
                 />
-                <BrandName>r. Company</BrandName>
+                <HeroInnerNavContainer>
+                    <BrandName>r. Company</BrandName>
+                    <nav>
+                        {products.map((product) => (
+                            <NavItem href={`#${product.name}`} key={product.id}>
+                                {product.name}
+                            </NavItem>
+                        ))}
+                    </nav>
+                </HeroInnerNavContainer>
             </HeroContainer>
 
             {products.map((product) => (
-                <ProductContainer key={product.id}>
+                <ProductContainer key={product.id} id={product.name}>
                     <ProductHero product={product}/>
                 </ProductContainer>
             ))}
