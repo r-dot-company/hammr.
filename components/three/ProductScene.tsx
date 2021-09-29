@@ -1,12 +1,12 @@
 import { Suspense } from "react"
 import { Center, OrbitControls, useCubeTexture } from "@react-three/drei"
-import { Color, Euler, SpotLight, SpotLightHelper } from "three"
+import { ColorRepresentation, Euler, SpotLight, SpotLightHelper } from "three"
 import STLRenderer from "./STLRenderer"
 import BrowserOnlyCanvas from "./BrowserOnlyCanvas"
 
 function Scene({ modelUrl, modelColor }: {
     modelUrl: string,
-    modelColor: Color
+    modelColor: ColorRepresentation
 }) {
     const envMap = useCubeTexture(
         ["px.png", "nx.png", "py.png", "ny.png", "pz.png", "nz.png"],
