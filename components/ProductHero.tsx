@@ -1,10 +1,7 @@
-import { shopr } from "api"
 import styled from "styled-components"
-import { Color } from "three"
 import { API } from "../api/types"
 import ProductScene from "./three/ProductScene"
 import Button from "./styled/Button"
-import { getProductMeta } from "lib/products"
 
 const Title = styled.h1`
     font-size: 96px;
@@ -26,28 +23,16 @@ const Price = styled.p`
     font-size: 18px;
 `
 
-function findModel(product: API.Product) {
-    return product.assets.find((asset) => asset.type.key === "model")
-}
-
 export default function ProductHero({ product }: {
     product: API.Product
 }) {
-    const model = findModel(product)
-    const meta = getProductMeta(product)
-
     return (
         <div>
             <Title>{product.name}</Title>
 
-            { model && (
-                <CanvasContainer>
-                    <ProductScene
-                        modelUrl={shopr.getAssetURL(model)}
-                        modelColor={meta.modelColor}
-                    />
-                </CanvasContainer>
-            ) }                
+            <CanvasContainer>
+                <ProductScene product={product}/>
+            </CanvasContainer>
 
             <ActionContainer>
                 <Price>{product.price}€</Price>

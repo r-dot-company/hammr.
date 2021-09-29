@@ -17,3 +17,11 @@ const products: Record<number, ProductMeta> = {
 export function getProductMeta(product: API.Product) {
     return products[product.id]
 }
+
+export function findProductModel(product: API.Product) {
+    return product.assets.find((asset) => asset.type.key === "model")
+}
+
+export function findProductPreviewImage(product: API.Product) {
+    return product.assets.find((asset) => asset.type.key === "image")
+}
