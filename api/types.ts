@@ -8,6 +8,15 @@ export namespace API {
         admin: boolean
     }
 
+    export type CreateUser = {
+        email: string,
+        password: string
+    }
+
+    export type UpdateUser = {
+        email: string
+    }
+
     export type Admin = {
         id: string,
         user: User,
@@ -15,6 +24,18 @@ export namespace API {
         createdAt: string,
         updateAt: string
     }
+
+    export type Address = {
+        id: string,
+        country: string,
+        city: string,
+        street: string,
+        zip: string
+    }
+
+    export type CreateAddress = Omit<Address, "id">
+
+    export type UpdateAddress = Partial<CreateAddress>
 
     export type AssetType = {
         key: string,
@@ -63,9 +84,28 @@ export namespace API {
         product: Product
     }
 
+    export type AddCartProduct = {
+        amount: number,
+        productId: number
+    }
+
+    export type UpdateCartProduct = {
+        amount: number
+    }
+
     export type Auth = {
         access_token: string,
         user: User
+    }
+
+    export type Login = {
+        email: string,
+        password: string
+    }
+
+    export type Error = {
+        message: string,
+        statusCode: number
     }
 
     export enum Access {

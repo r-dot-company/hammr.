@@ -36,7 +36,7 @@ export default function ProductHero({ product }: {
 
             <ActionContainer>
                 <Price>{product.price}€</Price>
-                <Button disabled>Sold Out</Button>
+                <Button>Add to cart</Button>
             </ActionContainer>
         </div>
     )
