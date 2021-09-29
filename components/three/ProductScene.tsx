@@ -1,6 +1,6 @@
 import { Suspense } from "react"
 import { Center, OrbitControls, useCubeTexture } from "@react-three/drei"
-import { ColorRepresentation, Euler, SpotLight, SpotLightHelper } from "three"
+import { ColorRepresentation, Euler } from "three"
 import STLRenderer from "./STLRenderer"
 import BrowserOnlyCanvas from "./BrowserOnlyCanvas"
 
@@ -12,17 +12,9 @@ function Scene({ modelUrl, modelColor }: {
         ["px.png", "nx.png", "py.png", "ny.png", "pz.png", "nz.png"],
         { path: "/assets/" }
     )
-    
-    const intensity = 1.5
 
     return (
         <>
-            {/* <ambientLight intensity={0.2}/> */}
-            {/* <spotLight position={[0, 90, 200]} intensity={intensity}/>
-            <spotLight position={[0, 90, -200]} intensity={intensity}/>
-            <spotLight position={[-150, 90, 25]} intensity={intensity}/>
-            <spotLight position={[150, 125, -25]} intensity={intensity}/>
-            <spotLight position={[75, -125, 75]} intensity={intensity}/> */}
             <OrbitControls makeDefault enablePan={false} enableZoom={false}/>
             <Suspense fallback={null}>
                 <Center>
