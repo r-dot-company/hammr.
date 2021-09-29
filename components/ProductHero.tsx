@@ -1,7 +1,8 @@
 import { shopr } from "api"
 import styled from "styled-components"
+import { Color } from "three"
 import { API } from "../api/types"
-import ProductScene from "./ProductScene"
+import ProductScene from "./three/ProductScene"
 import Button from "./styled/Button"
 
 const Title = styled.h1`
@@ -28,10 +29,19 @@ function findModel(product: API.Product) {
     return product.assets.find((asset) => asset.type.key === "model")
 }
 
+function getModelColor(product: API.Product) {
+    const colorMap: Record<number, Color> = {
+        1: new Color(0xeeeeee),
+        2: new Color(0x0f0f0f)
+    }
+    return colorMap[product.id]
+}
+
 export default function ProductHero({ product }: {
     product: API.Product
 }) {
     const model = findModel(product)
+    const color = getModelColor(product)
 
     return (
         <div>
@@ -39,7 +49,10 @@ export default function ProductHero({ product }: {
 
             { model && (
                 <CanvasContainer>
-                    <ProductScene modelUrl={shopr.getAssetURL(model)}/>
+                    <ProductScene
+                        modelUrl={shopr.getAssetURL(model)}
+                        modelColor={color}
+                    />
                 </CanvasContainer>
             ) }                
 

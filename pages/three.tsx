@@ -1,6 +1,6 @@
 import { NextPage } from "next"
 import styled from "styled-components"
-import ProductScene from "components/ProductScene"
+import ProductScene from "components/three/ProductScene"
 
 const CanvasContainer = styled.div`
     height: 500px;
