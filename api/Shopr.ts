@@ -21,11 +21,15 @@ export default class ShoprAPI {
             ...options,
             headers: {
                 ...options?.headers,
+                "Content-Type": "application/json",
                 "Authorization": this.token ? `Bearer ${this.token}` : ""
             }
         })
+        if (res.status >= 400) {
+            throw res
+        }
         const json = await res.json()
-        return json as T | API.Error
+        return json as T
     }
 
     private get<T>(path: string) {
@@ -134,11 +138,15 @@ export default class ShoprAPI {
         return this.makeURL(`storage/${asset.filename}`)
     }
 
-    async catch<T>(promise: Promise<T | API.Error>) {
-        const res = await promise
-        if ("statusCode" in res && res.statusCode !== 200) {
-            return undefined
+    isError(object: any): object is API.Error {
+        return "statusCode" in object && object.statusCode !== 200
+    }
+
+    async catch<T>(promise: Promise<T>) {
+        try {
+            return await promise
+        } catch {
+            return null
         }
-        return res as T
     }
 }

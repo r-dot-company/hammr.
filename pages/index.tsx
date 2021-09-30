@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from "next"
 import styled from "styled-components"
 import { API } from "api/types"
-import { shopr } from "api"
+import { createShoprClient } from "api"
 import ProductHero from "components/ProductHero"
 
 const HeroContainer = styled.div`
@@ -41,16 +41,12 @@ const NavItem = styled.a`
 `
 
 type Props = {
-    products?: API.Product[],
-    user?: API.User
+    products: API.Product[],
+    user: API.User | null
 }
 
 const IndexPage: NextPage<Props> = ({ products, user }) => {
     console.log({ user })
-
-    if (!products) {
-        throw new Error("Failed to fetch products")
-    }
 
     return (
         <>
@@ -68,7 +64,6 @@ const IndexPage: NextPage<Props> = ({ products, user }) => {
                             </NavItem>
                         ))}
                     </nav>
-                    { user && <span>{ user.fullname }</span>}
                 </HeroInnerNavContainer>
             </HeroContainer>
 
@@ -83,10 +78,11 @@ const IndexPage: NextPage<Props> = ({ products, user }) => {
 
 export default IndexPage
 
-export const getServerSideProps: GetServerSideProps<Props> = async () => {
+export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
+    const shopr = createShoprClient(context.req.headers.cookie || "")
     return {
         props: {
-            products: await shopr.catch(shopr.getProducts()),
+            products: await shopr.getProducts(),
             user: await shopr.catch(shopr.getProfile())
         }
     }
