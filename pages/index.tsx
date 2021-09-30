@@ -3,6 +3,7 @@ import styled from "styled-components"
 import { API } from "api/types"
 import { createShoprClient } from "api"
 import ProductHero from "components/ProductHero"
+import Link from "components/styled/Link"
 
 const HeroContainer = styled.div`
     display: flex;
@@ -20,7 +21,7 @@ const ProductContainer = styled.div`
 `
 
 const Logo = styled.img`
-    width: 50vw;
+    height: calc(100vh - ${props => props.theme.contentMargin});
 `
 
 const BrandName = styled.h1`
@@ -29,15 +30,10 @@ const BrandName = styled.h1`
     text-align: right;
 `
 
-const NavItem = styled.a`
+const NavItem = styled(Link)`
     display: block;
     font-size: 72px;
-    font-weight: 800;
     text-align: right;
-
-    &:hover {
-        color: #aaaaaa;
-    }
 `
 
 type Props = {
