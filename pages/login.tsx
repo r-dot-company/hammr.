@@ -1,8 +1,17 @@
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { shopr } from "api"
-import Button from "components/styled/Button"
 import { setToken } from "lib/auth"
+import Button from "components/styled/Button"
+import Input from "components/styled/Input"
+import styled from "styled-components"
+
+const Form = styled.form`
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: 64px auto 0;
+`
 
 type Fields = {
     email: string,
@@ -25,11 +34,12 @@ export default function LoginPage() {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
-            <input {...register("email")} type="email" placeholder="E-Mail"/>
-            <input {...register("password")} type="password" placeholder="Password"/>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+            <h1>Login</h1>
+            <Input {...register("email")} type="email" placeholder="E-Mail"/>
+            <Input {...register("password")} type="password" placeholder="Password"/>
             { error && <span>{error}</span> }
             <Button type="submit">Submit</Button>
-        </form>
+        </Form>
     )
 }
