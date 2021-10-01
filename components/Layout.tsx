@@ -38,6 +38,26 @@ const NavItem = styled(StyledLink)`
     }
 `
 
+const HeaderItem = styled(NavItem)`
+    margin-left: 0;
+    margin-right: 32px;
+
+    &:last-child {
+        margin-right: 0;
+    }
+`
+
+const CartLink = styled.a`
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+`
+
+const CartSize = styled.span`
+    font-size: 18px;
+    padding-left: 8px;
+`
+
 const ContentContainer = styled.main`
     border-left: 1px solid #fff;
     border-top: 1px solid #fff;
@@ -52,7 +72,18 @@ export default function Layout({ children }: React.PropsWithChildren<{}>) {
         <>
             <Header>
                 { context.user && (
-                    <NavItem><Link href="/profile">{ context.user.fullname }</Link></NavItem>
+                    <>
+                        <HeaderItem>
+                            <Link href="/profile">{ context.user.fullname }</Link>
+                        </HeaderItem>
+                        <HeaderItem>
+                            <Link href="/cart">
+                                <CartLink>
+                                    Cart <CartSize>({ context.cart?.length })</CartSize>
+                                </CartLink>
+                            </Link>
+                        </HeaderItem>
+                    </>
                 ) }
             </Header>
             <Container>

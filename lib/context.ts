@@ -9,7 +9,8 @@ export type AppContextAttributes = {
 
 export type AppContextMethods = {
     setUser: (user: API.User) => void,
-    setCart: (cart: API.CartProduct[]) => void
+    setCart: (cart: API.CartProduct[]) => void,
+    fetchCart: () => Promise<void>
 }
 
 export type AppContextType = AppContextAttributes & AppContextMethods
@@ -18,7 +19,8 @@ export const appContextDefaultValue: AppContextType = {
     user: null,
     setUser: () => {},
     cart: null,
-    setCart: () => {}
+    setCart: () => {},
+    fetchCart: async () => {}
 }
 
 export const AppContext = createContext(appContextDefaultValue)

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import App from "next/app"
 import type { AppContext, AppProps } from "next/app"
 import { createGlobalStyle, ThemeProvider } from "styled-components"
@@ -41,12 +41,21 @@ export default function MyApp({
 }: AppProps & ReactAppContextAttributes) {
     const [user, setUser] = useState<API.User | null>(props.user)
     const [cart, setCart] = useState<API.CartProduct[] | null>(props.cart)
+
+    const fetchCart = async () => {
+        const shopr = createShoprClient(document.cookie)
+        setCart(await shopr.getCart())
+    }
     
     const appContextValue: ReactAppContextType = {
         user, setUser,
-        cart, setCart
+        cart, setCart, fetchCart
     }
-    
+
+    useEffect(() => {
+        appContextValue.fetchCart()
+    }, [appContextValue.user?.id])
+
     return (
         <ReactAppContext.Provider value={appContextValue}>
             <ThemeProvider theme={theme}>
