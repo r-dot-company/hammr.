@@ -24,7 +24,7 @@ const NavRotationContainer = styled.div`
     display: flex;
     flex-direction: row-reverse;
     transform: rotate(-90deg);
-    margin-top: 32px;
+    margin-top: 30px;
     margin-left: -12px;
 `
 
@@ -50,7 +50,6 @@ const HeaderItem = styled(NavItem)`
 const CartLink = styled.a`
     display: flex;
     align-items: center;
-    cursor: pointer;
 `
 
 const CartSize = styled.span`
@@ -63,6 +62,7 @@ const ContentContainer = styled.main`
     border-top: 1px solid #fff;
     flex: 1;
     text-align: center;
+    padding-top: ${props => props.theme.contentPaddingTop};
 `
 
 export default function Layout({ children }: React.PropsWithChildren<{}>) {

@@ -51,7 +51,9 @@ export default class ShoprAPI {
     }
 
     private delete<T>(path: string) {
-        return this.fetchJSON<T>(path)
+        return this.fetchJSON<T>(path, {
+            method: "DELETE"
+        })
     }
 
     getProducts() {

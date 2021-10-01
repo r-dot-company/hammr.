@@ -22,12 +22,14 @@ const ProductContainer = styled.div`
 
 const Logo = styled.img`
     height: calc(100vh - ${props => props.theme.contentMargin});
+    margin-top: -${props => props.theme.contentPaddingTop};
 `
 
 const BrandName = styled.h1`
     font-size: 96px;
-    margin: 64px 0;
     text-align: right;
+    margin: 0;
+    margin-bottom: 64px;
 `
 
 const NavItem = styled(Link)`
