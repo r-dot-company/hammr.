@@ -7,6 +7,7 @@ import Button from "components/styled/Button"
 import Input from "components/styled/Input"
 import styled from "styled-components"
 import { AppContext } from "lib/context"
+import { NextPage } from "next"
 
 const Form = styled.form`
     display: flex;
@@ -20,7 +21,7 @@ type Fields = {
     password: string
 }
 
-export default function LoginPage() {
+const LoginPage: NextPage = () => {
     const router = useRouter()
 
     const context = useContext(AppContext)
@@ -57,3 +58,5 @@ export default function LoginPage() {
         </Form>
     )
 }
+
+export default LoginPage

@@ -7,3 +7,7 @@ export function setToken(token: string) {
         expires: 30
     })
 }
+
+export function removeToken() {
+    Cookies.remove(TOKEN_KEY)
+}
