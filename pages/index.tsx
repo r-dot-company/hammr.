@@ -1,7 +1,7 @@
 import { GetServerSideProps, NextPage } from "next"
 import styled from "styled-components"
 import { API } from "api/types"
-import { createShoprClient } from "api"
+import { shopr } from "api"
 import ProductHero from "components/ProductHero"
 import Link from "components/styled/Link"
 
@@ -37,13 +37,10 @@ const NavItem = styled(Link)`
 `
 
 type Props = {
-    products: API.Product[],
-    user: API.User | null
+    products: API.Product[]
 }
 
-const IndexPage: NextPage<Props> = ({ products, user }) => {
-    console.log({ user })
-
+const IndexPage: NextPage<Props> = ({ products }) => {
     return (
         <>
             <HeroContainer>
@@ -76,12 +73,10 @@ const IndexPage: NextPage<Props> = ({ products, user }) => {
 
 export default IndexPage
 
-export const getServerSideProps: GetServerSideProps<Props> = async (context) => {
-    const shopr = createShoprClient(context.req.headers.cookie || "")
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
     return {
         props: {
-            products: await shopr.getProducts(),
-            user: await shopr.catch(shopr.getProfile())
+            products: await shopr.getProducts()
         }
     }
 }
