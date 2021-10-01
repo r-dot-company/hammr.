@@ -1,17 +1,19 @@
+import "lib/nprogress.css"
 import { useState, useEffect } from "react"
 import App from "next/app"
 import type { AppContext, AppProps } from "next/app"
 import { createGlobalStyle, ThemeProvider } from "styled-components"
 import Layout from "components/Layout"
 import theme from "lib/theme"
-import { API } from "api/types"
 import { createShoprClient } from "api"
+import { API } from "api/types"
 import {
     AppContext as ReactAppContext,
     AppContextAttributes as ReactAppContextAttributes,
     AppContextType as ReactAppContextType,
     fetchContext
 } from "lib/context"
+import { useRouterProgress } from "lib/utils"
 
 const GlobalStyles = createGlobalStyle`
     html,
@@ -34,6 +36,10 @@ const GlobalStyles = createGlobalStyle`
         }
     }
 
+    bar: {
+
+    }
+
     * {
         box-sizing: border-box;
     }
@@ -44,6 +50,8 @@ export default function MyApp({
     pageProps,
     ...props
 }: AppProps & ReactAppContextAttributes) {
+    useRouterProgress()
+
     const [user, setUser] = useState<API.User | null>(props.user)
     const [cart, setCart] = useState<API.CartProduct[] | null>(props.cart)
 
