@@ -55,8 +55,10 @@ const IndexPage: NextPage<Props> = ({ products, user }) => {
                     <BrandName>r. Company</BrandName>
                     <nav>
                         {products.map((product) => (
-                            <NavItem href={`#${product.name}`} key={product.id}>
-                                {product.name}
+                            <NavItem key={product.id}>
+                                <a href={`#${product.name}`}>
+                                    {product.name}
+                                </a>
                             </NavItem>
                         ))}
                     </nav>
