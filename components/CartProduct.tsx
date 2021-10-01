@@ -2,7 +2,6 @@ import { useContext } from "react"
 import styled from "styled-components"
 import { API } from "api/types"
 import ProductScene from "./three/ProductScene"
-import Button from "./styled/Button"
 import { createShoprClient } from "api"
 import { AppContext } from "lib/context"
 
@@ -20,10 +19,13 @@ const Details = styled.div`
     padding: 12px;
 `
 
-const DetailsItem = styled.div`
+const DetailsItem = styled.div<{
+    dense?: boolean
+}>`
     font-size: 20px;
     font-weight: 800;
-    margin-bottom: 16px;
+    margin-bottom: ${props => !props.dense ? "16px" : "0"};
+    margin-right: ${props => !props.dense ? "0" : "16px"};
 `
 
 const ProductName = styled(DetailsItem)`
@@ -40,8 +42,9 @@ const CanvasContainer = styled.div`
     height: 200px;
 `
 
-export default function CartProduct({ product }: {
-    product: API.CartProduct
+export default function CartProduct({ product, dense = false }: {
+    product: API.CartProduct,
+    dense?: boolean
 }) {
     const context = useContext(AppContext)
 
@@ -49,6 +52,18 @@ export default function CartProduct({ product }: {
         const shopr = createShoprClient(document.cookie)
         await shopr.deleteCartProduct(product.product.id)
         await context.fetchCart()
+    }
+
+    if (dense) {
+        return (
+            <Container>
+                <div>
+                    <DetailsItem dense>{ product.product.name }</DetailsItem>
+                    <DetailsItem dense>Amount: { product.amount }</DetailsItem>
+                </div>
+                <DetailsItem dense>{ product.product.price } €</DetailsItem>
+            </Container>
+        )
     }
 
     return (
@@ -60,7 +75,6 @@ export default function CartProduct({ product }: {
                     <DetailsHelper>(Only one per customer)</DetailsHelper>
                 </DetailsItem>
                 <DetailsItem>{ product.product.price } €</DetailsItem>
-                {/* <Button dense onClick={removeFromCart}>Remove</Button> */}
                 <a onClick={removeFromCart}>Remove</a>
             </Details>
 
