@@ -9,6 +9,8 @@ export namespace API {
     }
 
     export type CreateUser = {
+        firstname: string,
+        lastname: string,
         email: string,
         password: string
     }
@@ -104,7 +106,7 @@ export namespace API {
     }
 
     export type Error = {
-        message: string,
+        message: string | string[],
         statusCode: number
     }
 

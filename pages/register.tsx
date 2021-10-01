@@ -10,6 +10,7 @@ import { AppContext } from "lib/context"
 import Button from "components/styled/Button"
 import Input from "components/styled/Input"
 import Container from "components/styled/Container"
+import { API } from "api/types"
 
 const Form = styled.form`
     display: flex;
@@ -20,17 +21,24 @@ const RegisterLink = styled.div`
     margin-top: 24px;
 `
 
-type Fields = {
-    email: string,
-    password: string
+const ErrorMessage = styled.div`
+    margin-bottom: 8px;
+`
+
+type Fields = API.CreateUser & {
+    password_confirmation: string
 }
 
-const LoginPage: NextPage = () => {
+function isAPIError(error: any): error is API.Error {
+    return "message" in error
+}
+
+const RegisterPage: NextPage = () => {
     const router = useRouter()
 
     const context = useContext(AppContext)
     
-    const [error, setError] = useState<string>()
+    const [errors, setErrors] = useState<string[]>()
 
     const { register, handleSubmit, getValues } = useForm<Fields>()
 
@@ -41,33 +49,58 @@ const LoginPage: NextPage = () => {
     }, [context.user])
     
     const onSubmit = async () => {
-        const { email, password } = getValues()
+        const {
+            firstname,
+            lastname,
+            email,
+            password,
+            password_confirmation
+        } = getValues()
+
+        if (password !== password_confirmation) {
+            setErrors(["Passwords don't match"])
+            return
+        }
+
         try {
+            await shopr.createUser({
+                firstname,
+                lastname,
+                email,
+                password
+            })
             const res = await shopr.login({ email, password })
             setToken(res.access_token)
             context.setUser(res.user)
         } catch (error) {
             console.error(error)
-            setError("Login failed")
+            if (isAPIError(error) && Array.isArray(error.message)) {
+                setErrors(error.message)
+            } else {
+                setErrors(["Registration Failed"])
+            }
         }
     }
 
     return (
         <Container size="sm">
-            <h1>Login</h1>
+            <h1>Register</h1>
 
             <Form onSubmit={handleSubmit(onSubmit)}>
+                <Input {...register("firstname")} type="text" placeholder="First name"/>
+                <Input {...register("lastname")} type="text" placeholder="Last name"/>
                 <Input {...register("email")} type="email" placeholder="E-Mail"/>
                 <Input {...register("password")} type="password" placeholder="Password"/>
+                <Input {...register("password_confirmation")} type="password" placeholder="Confirm Password"/>
+                { errors?.map((error, i) => <ErrorMessage key={i}>{error}</ErrorMessage>) }
                 <Button type="submit">Submit</Button>
-                { error && <span>{error}</span> }
             </Form>
 
             <RegisterLink>
-                <Link href="/register">I don't have an account</Link>
+                <Link href="/login">I already have an account</Link>
             </RegisterLink>
         </Container>
     )
 }
 
-export default LoginPage
+export default RegisterPage

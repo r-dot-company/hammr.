@@ -25,10 +25,10 @@ export default class ShoprAPI {
                 "Authorization": this.token ? `Bearer ${this.token}` : ""
             }
         })
-        if (res.status >= 400) {
-            throw res
-        }
         const json = await res.json()
+        if (res.status >= 400) {
+            throw json
+        }
         return json as T
     }
 
