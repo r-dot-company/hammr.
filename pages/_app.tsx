@@ -36,10 +36,6 @@ const GlobalStyles = createGlobalStyle`
         }
     }
 
-    bar: {
-
-    }
-
     * {
         box-sizing: border-box;
     }

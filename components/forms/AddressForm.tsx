@@ -8,7 +8,7 @@ import Button from "components/styled/Button"
 type Fields = Omit<API.Address, "id">
 
 export default function AddressForm({ address, ...props }: {
-    address?: API.Address,
+    address?: API.Address | null,
     onSubmit?: (address: API.Address) => void
 }) {
     const { register, handleSubmit } = useForm<Fields>({
@@ -18,7 +18,9 @@ export default function AddressForm({ address, ...props }: {
     const onSubmit: SubmitHandler<Fields> = async (fields) => {
         const shopr = createShoprClient(document.cookie)
         try {
-            const res = await shopr.createAddress(fields)
+            const res = address
+                ? await shopr.updateAddress(address.id, fields)
+                : await shopr.createAddress(fields)
             props.onSubmit?.(res)
         } catch (error) {
             console.error(error)
