@@ -1,3 +1,4 @@
+import { useState } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
 import { createShoprClient } from "api"
 import { API } from "api/types"
@@ -15,8 +16,11 @@ export default function AddressForm({ address, ...props }: {
         defaultValues: address || {}
     })
 
+    const [isLoading, setIsLoading] = useState(false)
+
     const onSubmit: SubmitHandler<Fields> = async (fields) => {
         const shopr = createShoprClient(document.cookie)
+        setIsLoading(true)
         try {
             const res = address
                 ? await shopr.updateAddress(address.id, fields)
@@ -24,6 +28,8 @@ export default function AddressForm({ address, ...props }: {
             props.onSubmit?.(res)
         } catch (error) {
             console.error(error)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -33,7 +39,7 @@ export default function AddressForm({ address, ...props }: {
             <Input {...register("zip")} type="text" placeholder="ZIP"/>
             <Input {...register("city")} type="text" placeholder="City"/>
             <Input {...register("country")} type="text" placeholder="Country"/>
-            <Button type="submit">Save</Button>
+            <Button type="submit" isLoading={isLoading}>Save</Button>
         </Form>
     )
 }

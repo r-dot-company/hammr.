@@ -61,7 +61,7 @@ export default function ProductHero({ product }: {
                 <Price>{product.price}€</Price>
                 { !isInCart
                     ? <Button onClick={addToCart}>Add to cart</Button>
-                    : <Button disabled>Added to cart</Button>
+                    : <Button disabled>In cart</Button>
                 }
             </ActionContainer>
         </div>

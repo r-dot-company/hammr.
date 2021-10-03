@@ -31,6 +31,7 @@ const RegisterPage: NextPage = () => {
 
     const context = useContext(AppContext)
     
+    const [isLoading, setIsLoading] = useState(false)
     const [errors, setErrors] = useState<string[]>()
 
     const { register, handleSubmit } = useForm<Fields>()
@@ -50,6 +51,8 @@ const RegisterPage: NextPage = () => {
             return
         }
 
+        setIsLoading(true)
+
         try {
             await shopr.createUser(fields)
             const res = await shopr.login({
@@ -65,6 +68,8 @@ const RegisterPage: NextPage = () => {
             } else {
                 setErrors(["Registration Failed"])
             }
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -79,7 +84,7 @@ const RegisterPage: NextPage = () => {
                 <Input {...register("password")} type="password" placeholder="Password"/>
                 <Input {...register("password_confirmation")} type="password" placeholder="Confirm Password"/>
                 { errors?.map((error, i) => <ErrorMessage key={i}>{error}</ErrorMessage>) }
-                <Button type="submit">Submit</Button>
+                <Button type="submit" isLoading={isLoading}>Submit</Button>
             </Form>
 
             <RegisterLink>

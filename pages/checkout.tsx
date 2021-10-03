@@ -25,16 +25,20 @@ const CheckoutPage: NextPage<Props> = (props: Props) => {
 
     const context = useContext(AppContext)
 
+    const [isLoading, setIsLoading] = useState(false)
     const [address, setAddress] = useState(props.address)
 
     const handleOrderSubmit = async () => {
         const shopr = createShoprClient(document.cookie)
+        setIsLoading(true)
         try {
             await shopr.submitOrder()
             await context.fetchCart()
             router.push("/orders")
         } catch (error) {
             console.error(error)
+        } finally {
+            setIsLoading(false)
         }
     }
 
@@ -57,7 +61,7 @@ const CheckoutPage: NextPage<Props> = (props: Props) => {
             <h2>Shipping Address</h2>
             { address && <Address address={address}/>}
 
-            <Button onClick={handleOrderSubmit}>Order Now</Button>
+            <Button onClick={handleOrderSubmit} isLoading={isLoading}>Order Now</Button>
         </Container>
     )
 }
