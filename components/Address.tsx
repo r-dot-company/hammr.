@@ -2,12 +2,10 @@ import { useContext } from "react"
 import styled from "styled-components"
 import { API } from "api/types"
 import { AppContext } from "lib/context"
+import Box from "./styled/Box"
 
-const Container = styled.div`
+const Container = styled(Box)`
     margin-bottom: 32px;
-    border: 1px solid #fff;
-    padding: 12px;
-    text-align: left;
 
     & > div {
         font-weight: 800;

@@ -83,6 +83,9 @@ export default function Layout({ children }: React.PropsWithChildren<{}>) {
                                 </CartLink>
                             </Link>
                         </HeaderItem>
+                        <HeaderItem>
+                            <Link href="/orders">Orders</Link>
+                        </HeaderItem>
                     </>
                 ) }
             </Header>

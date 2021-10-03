@@ -1,15 +1,13 @@
 import { useContext } from "react"
 import styled from "styled-components"
-import { API } from "api/types"
-import ProductScene from "./three/ProductScene"
 import { createShoprClient } from "api"
+import { API } from "api/types"
 import { AppContext } from "lib/context"
+import ProductScene from "./three/ProductScene"
+import Box from "./styled/Box"
 
-const Container = styled.div`
+const Container = styled(Box)`
     margin-bottom: 32px;
-    border: 1px solid #fff;
-    padding: 12px;
-    text-align: left;
     display: flex;
     justify-content: space-between;
     align-items: center;

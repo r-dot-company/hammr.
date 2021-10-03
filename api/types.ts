@@ -65,9 +65,8 @@ export namespace API {
         status: OrderStatus,
         total: number,
         user: User,
-        prooducts: CartProduct[],
-        createdAt: string,
-        updatedAt: string
+        products: CartProduct[],
+        createdAt: string
     }
 
     export type Product = {
@@ -77,8 +76,6 @@ export namespace API {
         access: Access,
         assets: Asset[],
         categories: Category[],
-        createdAt: string,
-        updatedAt: string
     }
 
     export type CartProduct = {

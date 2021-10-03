@@ -31,6 +31,7 @@ const CheckoutPage: NextPage<Props> = (props: Props) => {
         const shopr = createShoprClient(document.cookie)
         try {
             await shopr.submitOrder()
+            await context.fetchCart()
             router.push("/orders")
         } catch (error) {
             console.error(error)
@@ -63,9 +64,9 @@ const CheckoutPage: NextPage<Props> = (props: Props) => {
 
 export default CheckoutPage
 
-export const getServerSideProps: GetServerSideProps<
-    Props
-> = async (context: GetServerSidePropsContext) => {
+export const getServerSideProps: GetServerSideProps<Props> = async (
+    context: GetServerSidePropsContext
+) => {
     const shopr = createShoprClient(context.req.headers.cookie || "")
     const cart = await shopr.catch(shopr.getCart())
     const addresses = await shopr.catch(shopr.getAddress())
