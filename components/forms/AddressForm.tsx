@@ -5,6 +5,7 @@ import { API } from "api/types"
 import Form from "components/styled/Form"
 import Input from "components/styled/Input"
 import Button from "components/styled/Button"
+import FormError from "components/FormError"
 
 type Fields = Omit<API.Address, "id">
 
@@ -17,10 +18,12 @@ export default function AddressForm({ address, ...props }: {
     })
 
     const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState<any>()
 
     const onSubmit: SubmitHandler<Fields> = async (fields) => {
         const shopr = createShoprClient(document.cookie)
         setIsLoading(true)
+        setError(null)
         try {
             const res = address
                 ? await shopr.updateAddress(address.id, fields)
@@ -28,6 +31,7 @@ export default function AddressForm({ address, ...props }: {
             props.onSubmit?.(res)
         } catch (error) {
             console.error(error)
+            setError(error)
         } finally {
             setIsLoading(false)
         }
@@ -35,6 +39,7 @@ export default function AddressForm({ address, ...props }: {
 
     return (
         <Form onSubmit={handleSubmit(onSubmit)}>
+            <FormError error={error}/>
             <Input {...register("street")} type="text" placeholder="Street"/>
             <Input {...register("zip")} type="text" placeholder="ZIP"/>
             <Input {...register("city")} type="text" placeholder="City"/>

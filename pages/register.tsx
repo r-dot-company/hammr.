@@ -12,7 +12,7 @@ import Button from "components/styled/Button"
 import Input from "components/styled/Input"
 import Container from "components/styled/Container"
 import Form from "components/styled/Form"
-import ErrorMessage from "components/styled/ErrorMessage"
+import FormError from "components/FormError"
 
 const RegisterLink = styled.div`
     margin-top: 24px;
@@ -22,17 +22,13 @@ type Fields = API.CreateUser & {
     password_confirmation: string
 }
 
-function isAPIError(error: any): error is API.Error {
-    return "message" in error
-}
-
 const RegisterPage: NextPage = () => {
     const router = useRouter()
 
     const context = useContext(AppContext)
     
     const [isLoading, setIsLoading] = useState(false)
-    const [errors, setErrors] = useState<string[]>()
+    const [error, setError] = useState<any>()
 
     const { register, handleSubmit } = useForm<Fields>()
 
@@ -47,12 +43,11 @@ const RegisterPage: NextPage = () => {
         ...fields
     }) => {
         if (fields.password !== password_confirmation) {
-            setErrors(["Passwords don't match"])
+            setError("Passwords don't match")
             return
         }
-
         setIsLoading(true)
-
+        setError(null)
         try {
             await shopr.createUser(fields)
             const res = await shopr.login({
@@ -63,11 +58,7 @@ const RegisterPage: NextPage = () => {
             context.setUser(res.user)
         } catch (error) {
             console.error(error)
-            if (isAPIError(error) && Array.isArray(error.message)) {
-                setErrors(error.message)
-            } else {
-                setErrors(["Registration Failed"])
-            }
+            setError(error)
         } finally {
             setIsLoading(false)
         }
@@ -78,12 +69,12 @@ const RegisterPage: NextPage = () => {
             <h1>Register</h1>
 
             <Form onSubmit={handleSubmit(onSubmit)}>
+                <FormError error={error}/>
                 <Input {...register("firstname")} type="text" placeholder="First name"/>
                 <Input {...register("lastname")} type="text" placeholder="Last name"/>
                 <Input {...register("email")} type="email" placeholder="E-Mail"/>
                 <Input {...register("password")} type="password" placeholder="Password"/>
                 <Input {...register("password_confirmation")} type="password" placeholder="Confirm Password"/>
-                { errors?.map((error, i) => <ErrorMessage key={i}>{error}</ErrorMessage>) }
                 <Button type="submit" isLoading={isLoading}>Submit</Button>
             </Form>
 

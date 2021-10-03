@@ -11,7 +11,7 @@ import Button from "components/styled/Button"
 import Input from "components/styled/Input"
 import Container from "components/styled/Container"
 import Form from "components/styled/Form"
-import ErrorMessage from "components/styled/ErrorMessage"
+import FormError from "components/FormError"
 
 const RegisterLink = styled.div`
     margin-top: 24px;
@@ -28,7 +28,7 @@ const LoginPage: NextPage = () => {
     const context = useContext(AppContext)
     
     const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState<string>()
+    const [error, setError] = useState<any>()
 
     const { register, handleSubmit } = useForm<Fields>()
 
@@ -40,13 +40,14 @@ const LoginPage: NextPage = () => {
     
     const onSubmit: SubmitHandler<Fields> = async (fields) => {
         setIsLoading(true)
+        setError(null)
         try {
             const res = await shopr.login(fields)
             setToken(res.access_token)
             context.setUser(res.user)
         } catch (error) {
             console.error(error)
-            setError("Login failed")
+            setError(error)
         } finally {
             setIsLoading(false)
         }
@@ -57,9 +58,9 @@ const LoginPage: NextPage = () => {
             <h1>Login</h1>
 
             <Form onSubmit={handleSubmit(onSubmit)}>
+                <FormError error={error}/>
                 <Input {...register("email")} type="email" placeholder="E-Mail"/>
                 <Input {...register("password")} type="password" placeholder="Password"/>
-                { error && <ErrorMessage>{error}</ErrorMessage> }
                 <Button type="submit" isLoading={isLoading}>Submit</Button>
             </Form>
 
@@ -71,3 +72,5 @@ const LoginPage: NextPage = () => {
 }
 
 export default LoginPage
+
+// TODO: Redirect to "/" server-sided
