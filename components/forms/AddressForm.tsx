@@ -20,7 +20,7 @@ export default function AddressForm({ address, ...props }: {
         try {
             const res = await shopr.createAddress(fields)
             props.onSubmit?.(res)
-        } catch(error) {
+        } catch (error) {
             console.error(error)
         }
     }

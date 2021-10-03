@@ -1,5 +1,6 @@
 import { useContext, useState } from "react"
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next"
+import { useRouter } from "next/router"
 import styled from "styled-components"
 import { AppContext } from "lib/context"
 import { createShoprClient } from "api"
@@ -20,9 +21,21 @@ type Props = {
 }
 
 const CheckoutPage: NextPage<Props> = (props: Props) => {
+    const router = useRouter()
+
     const context = useContext(AppContext)
 
     const [address, setAddress] = useState(props.address)
+
+    const handleOrderSubmit = async () => {
+        const shopr = createShoprClient(document.cookie)
+        try {
+            await shopr.submitOrder()
+            router.push("/orders")
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     if (!address) {
         return (
@@ -43,7 +56,7 @@ const CheckoutPage: NextPage<Props> = (props: Props) => {
             <h2>Shipping Address</h2>
             { address && <Address address={address}/>}
 
-            <Button>Order Now</Button>
+            <Button onClick={handleOrderSubmit}>Order Now</Button>
         </Container>
     )
 }
@@ -54,7 +67,17 @@ export const getServerSideProps: GetServerSideProps<
     Props
 > = async (context: GetServerSidePropsContext) => {
     const shopr = createShoprClient(context.req.headers.cookie || "")
+    const cart = await shopr.catch(shopr.getCart())
     const addresses = await shopr.catch(shopr.getAddress())
+
+    if (cart?.length === 0) {
+        return {
+            redirect: {
+                destination: "/cart",
+                permanent: false
+            }
+        }
+    }
 
     return {
         props: {
