@@ -47,13 +47,13 @@ const RegisterPage: NextPage = () => {
             return
         }
         setIsLoading(true)
-        setError(null)
         try {
             await shopr.createUser(fields)
             const res = await shopr.login({
                 email: fields.email,
                 password: fields.password
             })
+            setError(null)
             setToken(res.access_token)
             context.setUser(res.user)
         } catch (error) {

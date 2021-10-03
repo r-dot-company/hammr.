@@ -23,11 +23,11 @@ export default function AddressForm({ address, ...props }: {
     const onSubmit: SubmitHandler<Fields> = async (fields) => {
         const shopr = createShoprClient(document.cookie)
         setIsLoading(true)
-        setError(null)
         try {
             const res = address
                 ? await shopr.updateAddress(address.id, fields)
                 : await shopr.createAddress(fields)
+            setError(null)
             props.onSubmit?.(res)
         } catch (error) {
             console.error(error)

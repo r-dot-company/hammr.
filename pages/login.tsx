@@ -40,9 +40,9 @@ const LoginPage: NextPage = () => {
     
     const onSubmit: SubmitHandler<Fields> = async (fields) => {
         setIsLoading(true)
-        setError(null)
         try {
             const res = await shopr.login(fields)
+            setError(null)
             setToken(res.access_token)
             context.setUser(res.user)
         } catch (error) {
