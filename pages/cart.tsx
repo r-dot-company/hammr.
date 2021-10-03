@@ -9,7 +9,7 @@ import Button from "components/styled/Button"
 import styled from "styled-components"
 
 const Container = styled(ContainerBase)`
-    text-align: right;
+    text-align: left;
 `
 
 const CartPage: NextPage = () => {
