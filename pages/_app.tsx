@@ -32,7 +32,7 @@ const GlobalStyles = createGlobalStyle`
         cursor: pointer;
     
         &:hover {
-            color: #aaaaaa;
+            color: #aaa;
         }
     }
 
