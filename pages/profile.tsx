@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next"
 import { createShoprClient } from "api"
 import { API } from "api/types"
@@ -10,13 +10,18 @@ type Props = {
     address: API.Address | null
 }
 
-const ProfilePage: NextPage<Props> = ({ address }: Props) => {
+const ProfilePage: NextPage<Props> = (props: Props) => {
     const context = useContext(AppContext)
+    
+    const [address, setAddress] = useState(props.address)
 
     return (
         <Container size="sm">
             <h1>{ context.user?.fullname }</h1>
-            <AddressForm address={address}/>
+            <AddressForm
+                address={address}
+                onSubmit={(newAddress) => setAddress(newAddress)}
+            />
         </Container>
     )
 }
