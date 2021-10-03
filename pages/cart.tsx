@@ -1,12 +1,12 @@
 import { useContext } from "react"
 import { NextPage } from "next"
 import { useRouter } from "next/router"
+import styled from "styled-components"
 import { AppContext } from "lib/context"
 import { requireAuth } from "lib/auth"
 import CartProduct from "components/CartProduct"
 import ContainerBase from "components/styled/Container"
 import Button from "components/styled/Button"
-import styled from "styled-components"
 
 const Container = styled(ContainerBase)`
     text-align: left;
@@ -37,4 +37,6 @@ const CartPage: NextPage = () => {
     )
 }
 
-export default requireAuth(CartPage)
+export default CartPage
+
+export const getServerSideProps = requireAuth(async () => ({ props: {} }))

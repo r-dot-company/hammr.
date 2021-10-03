@@ -2,9 +2,10 @@ import { useContext, useState } from "react"
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next"
 import { useRouter } from "next/router"
 import styled from "styled-components"
-import { AppContext } from "lib/context"
 import { createShoprClient } from "api"
 import { API } from "api/types"
+import { AppContext } from "lib/context"
+import { requireAuth } from "lib/auth"
 import ContainerBase from "components/styled/Container"
 import CartProduct from "components/CartProduct"
 import Address from "components/Address"
@@ -68,7 +69,7 @@ const CheckoutPage: NextPage<Props> = (props: Props) => {
 
 export default CheckoutPage
 
-export const getServerSideProps: GetServerSideProps<Props> = async (
+export const getServerSideProps: GetServerSideProps<Props> = requireAuth<Props>(async (
     context: GetServerSidePropsContext
 ) => {
     const shopr = createShoprClient(context.req.headers.cookie || "")
@@ -89,4 +90,4 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
             address: addresses?.[0] || null
         }
     }
-}
+})

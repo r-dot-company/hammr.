@@ -1,17 +1,17 @@
 import { useState, useContext, useEffect } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { NextPage } from "next"
-import { useRouter } from "next/router"
+import { GetServerSideProps, NextPage } from "next"
 import Link from "next/link"
 import styled from "styled-components"
 import { shopr } from "api"
-import { setToken } from "lib/auth"
+import { requireAuth, setToken } from "lib/auth"
 import { AppContext } from "lib/context"
 import Button from "components/styled/Button"
 import Input from "components/styled/Input"
 import Container from "components/styled/Container"
 import Form from "components/styled/Form"
 import FormError from "components/FormError"
+import { useRouter } from "next/router"
 
 const RegisterLink = styled.div`
     margin-top: 24px;
@@ -24,19 +24,13 @@ type Fields = {
 
 const LoginPage: NextPage = () => {
     const router = useRouter()
-
+    
     const context = useContext(AppContext)
     
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState<any>()
 
     const { register, handleSubmit } = useForm<Fields>()
-
-    useEffect(() => {
-        if (context.user) {
-            router.push("/")
-        }
-    }, [context.user])
     
     const onSubmit: SubmitHandler<Fields> = async (fields) => {
         setIsLoading(true)
@@ -52,6 +46,12 @@ const LoginPage: NextPage = () => {
             setIsLoading(false)
         }
     }
+
+    useEffect(() => {
+        if (context.user) {
+            router.push("/")
+        }
+    }, [context.user])
 
     return (
         <Container size="sm">
@@ -73,4 +73,7 @@ const LoginPage: NextPage = () => {
 
 export default LoginPage
 
-// TODO: Redirect to "/" server-sided
+export const getServerSideProps: GetServerSideProps = requireAuth(
+    async () => ({ props: {} }),
+    { invert: true }
+)

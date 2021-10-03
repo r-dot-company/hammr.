@@ -1,8 +1,9 @@
 import { createShoprClient } from "api"
+import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next"
 import { API } from "api/types"
+import { requireAuth } from "lib/auth"
 import Order from "components/Order"
 import Container from "components/styled/Container"
-import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next"
 
 type Props = {
     orders: API.Order[] | null
@@ -26,11 +27,11 @@ const OrdersPage: NextPage<Props> = ({ orders }: Props) => {
 
 export default OrdersPage
 
-export const getServerSideProps: GetServerSideProps<Props> = async (
+export const getServerSideProps: GetServerSideProps<Props> = requireAuth<Props>(async (
     context: GetServerSidePropsContext
 ) => {
     const shopr = createShoprClient(context.req.headers.cookie || "")
     const orders = await shopr.catch(shopr.getOrders())
 
     return { props: { orders } }
-}
+})

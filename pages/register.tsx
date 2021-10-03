@@ -1,12 +1,12 @@
 import { useState, useContext, useEffect } from "react"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { NextPage } from "next"
+import { GetServerSideProps, NextPage } from "next"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import styled from "styled-components"
 import { shopr } from "api"
 import { API } from "api/types"
-import { setToken } from "lib/auth"
+import { requireAuth, setToken } from "lib/auth"
 import { AppContext } from "lib/context"
 import Button from "components/styled/Button"
 import Input from "components/styled/Input"
@@ -86,3 +86,8 @@ const RegisterPage: NextPage = () => {
 }
 
 export default RegisterPage
+
+export const getServerSideProps: GetServerSideProps = requireAuth(
+    async () => ({ props: {} }),
+    { invert: true }
+)
