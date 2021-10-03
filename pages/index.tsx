@@ -1,7 +1,9 @@
 import { GetServerSideProps, NextPage } from "next"
+import Head from "next/head"
 import styled from "styled-components"
 import { API } from "api/types"
 import { shopr } from "api"
+import { makeTitle } from "lib/utils"
 import ProductHero from "components/ProductHero"
 import Link from "components/styled/Link"
 
@@ -45,13 +47,16 @@ type Props = {
 const IndexPage: NextPage<Props> = ({ products }) => {
     return (
         <>
+            <Head>
+                <title>{ makeTitle("Hammr.") }</title>
+            </Head>
+
             <HeroContainer>
                 <Logo
                     src="assets/logo-white.svg"
                     alt="Logo"
                 />
                 <HeroInnerNavContainer>
-                    <BrandName>r. Company</BrandName>
                     <nav>
                         {products.map((product) => (
                             <NavItem key={product.id}>

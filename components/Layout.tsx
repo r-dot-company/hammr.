@@ -92,7 +92,7 @@ export default function Layout({ children }: React.PropsWithChildren<{}>) {
             <Container>
                 <Nav>
                     <NavRotationContainer>
-                        <NavItem><Link href="/">Home</Link></NavItem>
+                        <NavItem><Link href="/">Hammr.</Link></NavItem>
                         { !context.user
                             ? <NavItem><Link href="/login">Login</Link></NavItem>
                             : <NavItem><Link href="/logout">Logout</Link></NavItem>

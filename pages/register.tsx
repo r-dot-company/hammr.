@@ -3,11 +3,13 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import { GetServerSideProps, NextPage } from "next"
 import { useRouter } from "next/router"
 import Link from "next/link"
+import Head from "next/head"
 import styled from "styled-components"
 import { shopr } from "api"
 import { API } from "api/types"
 import { requireAuth, setToken } from "lib/auth"
 import { AppContext } from "lib/context"
+import { makeTitle } from "lib/utils"
 import Button from "components/styled/Button"
 import Input from "components/styled/Input"
 import Container from "components/styled/Container"
@@ -56,6 +58,7 @@ const RegisterPage: NextPage = () => {
             setError(null)
             setToken(res.access_token)
             context.setUser(res.user)
+            await context.fetchCart()
         } catch (error) {
             console.error(error)
             setError(error)
@@ -66,6 +69,10 @@ const RegisterPage: NextPage = () => {
 
     return (
         <Container size="sm">
+            <Head>
+                <title>{ makeTitle("Register") }</title>
+            </Head>
+            
             <h1>Register</h1>
 
             <Form onSubmit={handleSubmit(onSubmit)}>

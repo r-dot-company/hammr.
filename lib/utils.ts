@@ -21,3 +21,7 @@ export function useRouterProgress() {
         }
     }, [router.events])
 }
+
+export function makeTitle(title: string) {
+    return `${title} - r.`
+}

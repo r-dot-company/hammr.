@@ -61,10 +61,6 @@ export default function MyApp({
         cart, setCart, fetchCart
     }
 
-    useEffect(() => {
-        appContextValue.fetchCart()
-    }, [appContextValue.user?.id])
-
     return (
         <ReactAppContext.Provider value={appContextValue}>
             <ThemeProvider theme={theme}>

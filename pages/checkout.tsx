@@ -1,11 +1,13 @@
 import { useContext, useState } from "react"
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next"
 import { useRouter } from "next/router"
+import Head from "next/head"
 import styled from "styled-components"
 import { createShoprClient } from "api"
 import { API } from "api/types"
 import { AppContext } from "lib/context"
 import { requireAuth } from "lib/auth"
+import { makeTitle } from "lib/utils"
 import ContainerBase from "components/styled/Container"
 import CartProduct from "components/CartProduct"
 import Address from "components/Address"
@@ -43,9 +45,16 @@ const CheckoutPage: NextPage<Props> = (props: Props) => {
         }
     }
 
+    const head = (
+        <Head>
+            <title>{ makeTitle("Checkout") }</title>
+        </Head>
+    )
+
     if (!address) {
         return (
             <Container size="sm">
+                { head }
                 <AddressForm onSubmit={(newAddress) => setAddress(newAddress)}/>
             </Container>
         )
@@ -53,10 +62,13 @@ const CheckoutPage: NextPage<Props> = (props: Props) => {
 
     return (
         <Container>
+            { head }
+
             <h2>Cart</h2>
             { context.cart?.map((product) => (
                 <CartProduct product={product} dense key={product.product.id}/>
             )) }
+
             <h3>Total: <CartTotal/> €</h3>
 
             <h2>Shipping Address</h2>

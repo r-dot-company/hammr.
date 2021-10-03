@@ -1,11 +1,13 @@
 import { useContext, useState } from "react"
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next"
+import Head from "next/head"
 import { createShoprClient } from "api"
 import { API } from "api/types"
 import { AppContext } from "lib/context"
+import { requireAuth } from "lib/auth"
+import { makeTitle } from "lib/utils"
 import AddressForm from "components/forms/AddressForm"
 import Container from "components/styled/Container"
-import { requireAuth } from "lib/auth"
 
 type Props = {
     address: API.Address | null
@@ -18,6 +20,9 @@ const ProfilePage: NextPage<Props> = (props: Props) => {
 
     return (
         <Container size="sm">
+            <Head>
+                <title>{ makeTitle("Profile") }</title>
+            </Head>
             <h1>{ context.user?.fullname }</h1>
             <AddressForm
                 address={address}
