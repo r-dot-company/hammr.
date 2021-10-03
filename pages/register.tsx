@@ -1,28 +1,21 @@
 import { useState, useContext, useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { SubmitHandler, useForm } from "react-hook-form"
 import { NextPage } from "next"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import styled from "styled-components"
 import { shopr } from "api"
+import { API } from "api/types"
 import { setToken } from "lib/auth"
 import { AppContext } from "lib/context"
 import Button from "components/styled/Button"
 import Input from "components/styled/Input"
 import Container from "components/styled/Container"
-import { API } from "api/types"
-
-const Form = styled.form`
-    display: flex;
-    flex-direction: column;
-`
+import Form from "components/styled/Form"
+import ErrorMessage from "components/styled/ErrorMessage"
 
 const RegisterLink = styled.div`
     margin-top: 24px;
-`
-
-const ErrorMessage = styled.div`
-    margin-bottom: 8px;
 `
 
 type Fields = API.CreateUser & {
@@ -40,7 +33,7 @@ const RegisterPage: NextPage = () => {
     
     const [errors, setErrors] = useState<string[]>()
 
-    const { register, handleSubmit, getValues } = useForm<Fields>()
+    const { register, handleSubmit } = useForm<Fields>()
 
     useEffect(() => {
         if (context.user) {
@@ -48,28 +41,21 @@ const RegisterPage: NextPage = () => {
         }
     }, [context.user])
     
-    const onSubmit = async () => {
-        const {
-            firstname,
-            lastname,
-            email,
-            password,
-            password_confirmation
-        } = getValues()
-
-        if (password !== password_confirmation) {
+    const onSubmit: SubmitHandler<Fields> = async ({
+        password_confirmation,
+        ...fields
+    }) => {
+        if (fields.password !== password_confirmation) {
             setErrors(["Passwords don't match"])
             return
         }
 
         try {
-            await shopr.createUser({
-                firstname,
-                lastname,
-                email,
-                password
+            await shopr.createUser(fields)
+            const res = await shopr.login({
+                email: fields.email,
+                password: fields.password
             })
-            const res = await shopr.login({ email, password })
             setToken(res.access_token)
             context.setUser(res.user)
         } catch (error) {

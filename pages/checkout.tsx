@@ -1,15 +1,15 @@
-import { useContext, useEffect } from "react"
+import { useContext, useState } from "react"
 import { GetServerSideProps, GetServerSidePropsContext, NextPage } from "next"
-import { useRouter } from "next/router"
 import styled from "styled-components"
-import ContainerBase from "components/styled/Container"
 import { AppContext } from "lib/context"
 import { createShoprClient } from "api"
 import { API } from "api/types"
+import ContainerBase from "components/styled/Container"
 import CartProduct from "components/CartProduct"
 import Address from "components/Address"
 import CartTotal from "components/CartTotal"
 import Button from "components/styled/Button"
+import AddressForm from "components/forms/AddressForm"
 
 const Container = styled(ContainerBase)`
     text-align: left;
@@ -20,15 +20,17 @@ type Props = {
 }
 
 const CheckoutPage: NextPage<Props> = (props: Props) => {
-    const router = useRouter()
-    
     const context = useContext(AppContext)
 
-    useEffect(() => {
-        if (!props.address) {
-            router.push("/")
-        }
-    }, [props.address])
+    const [address, setAddress] = useState(props.address)
+
+    if (!address) {
+        return (
+            <Container size="sm">
+                <AddressForm onSubmit={(newAddress) => setAddress(newAddress)}/>
+            </Container>
+        )
+    }
 
     return (
         <Container>
@@ -39,7 +41,7 @@ const CheckoutPage: NextPage<Props> = (props: Props) => {
             <h3>Total: <CartTotal/> €</h3>
 
             <h2>Shipping Address</h2>
-            { props.address && <Address address={props.address}/>}
+            { address && <Address address={address}/>}
 
             <Button>Order Now</Button>
         </Container>
@@ -53,16 +55,10 @@ export const getServerSideProps: GetServerSideProps<
 > = async (context: GetServerSidePropsContext) => {
     const shopr = createShoprClient(context.req.headers.cookie || "")
     const addresses = await shopr.catch(shopr.getAddress())
-    const address = addresses?.[0]
 
-    if (!address) {
-        return {
-            redirect: {
-                destination: "/",
-                permanent: false
-            }
+    return {
+        props: {
+            address: addresses?.[0] || null
         }
     }
-
-    return { props: { address } }
 }

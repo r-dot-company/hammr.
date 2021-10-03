@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from "react"
-import { useForm } from "react-hook-form"
+import { SubmitHandler, useForm } from "react-hook-form"
 import { NextPage } from "next"
 import { useRouter } from "next/router"
 import Link from "next/link"
@@ -10,11 +10,7 @@ import { AppContext } from "lib/context"
 import Button from "components/styled/Button"
 import Input from "components/styled/Input"
 import Container from "components/styled/Container"
-
-const Form = styled.form`
-    display: flex;
-    flex-direction: column;
-`
+import Form from "components/styled/Form"
 
 const RegisterLink = styled.div`
     margin-top: 24px;
@@ -32,7 +28,7 @@ const LoginPage: NextPage = () => {
     
     const [error, setError] = useState<string>()
 
-    const { register, handleSubmit, getValues } = useForm<Fields>()
+    const { register, handleSubmit } = useForm<Fields>()
 
     useEffect(() => {
         if (context.user) {
@@ -40,10 +36,9 @@ const LoginPage: NextPage = () => {
         }
     }, [context.user])
     
-    const onSubmit = async () => {
-        const { email, password } = getValues()
+    const onSubmit: SubmitHandler<Fields> = async (fields) => {
         try {
-            const res = await shopr.login({ email, password })
+            const res = await shopr.login(fields)
             setToken(res.access_token)
             context.setUser(res.user)
         } catch (error) {
